@@ -9,5 +9,4 @@ db = Database()
 Events(bot)
 Commands(bot, db)
 
-if __name__ == "__main__":
-    bot.run(db.get_token())
+bot.run(db.get_token())

@@ -9,6 +9,7 @@ class Database:
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS legends (id INTEGER PRIMARY KEY, name TEXT)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS token (token TEXT PRIMARY KEY)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS levels (id INTEGER PRIMARY KEY, name TEXT, level INTEGER)")
         self.conn.commit()
 
     def get_token(self):
@@ -23,3 +24,20 @@ class Database:
         for legend in legends_list:
             legends_ids.append(legend[0])
         return legends_ids
+
+    def get_levels(self):
+        self.cur.execute("SELECT * FROM levels")
+        levels_list = self.cur.fetchall()
+        levels_ids = list()
+        for level in levels_list:
+            levels_ids.append(level[0])
+        return levels_ids
+
+    def get_level(self, user_id):
+        self.cur.execute("SELECT * FROM levels WHERE id=?", (user_id,))
+        level_value = self.cur.fetchone()
+        return level_value[2]
+
+    def set_level(self, user_id, level):
+        self.cur.execute("INSERT OR REPLACE INTO levels (id, name, level) VALUES (?, ?, ?)", (user_id, "", level))
+        self.conn.commit()

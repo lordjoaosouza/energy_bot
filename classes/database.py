@@ -7,9 +7,9 @@ class Database:
 
         self.conn = sqlite3.connect(db_name)
         self.cur = self.conn.cursor()
-        self.cur.execute("CREATE TABLE IF NOT EXISTS legends (id INTEGER PRIMARY KEY, name TEXT)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS legends (id INTEGER PRIMARY KEY)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS token (token TEXT PRIMARY KEY)")
-        self.cur.execute("CREATE TABLE IF NOT EXISTS levels (id INTEGER PRIMARY KEY, name TEXT, level INTEGER)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS levels (id INTEGER PRIMARY KEY, level INTEGER)")
         self.conn.commit()
 
     def get_token(self):
@@ -36,8 +36,8 @@ class Database:
     def get_level(self, user_id):
         self.cur.execute("SELECT * FROM levels WHERE id=?", (user_id,))
         level_value = self.cur.fetchone()
-        return level_value[2]
+        return level_value[1]
 
     def set_level(self, user_id, level):
-        self.cur.execute("INSERT OR REPLACE INTO levels (id, name, level) VALUES (?, ?, ?)", (user_id, "", level))
+        self.cur.execute("INSERT OR REPLACE INTO levels (id, level) VALUES (?, ?)", (user_id, level))
         self.conn.commit()

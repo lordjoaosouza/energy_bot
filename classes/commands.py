@@ -3,7 +3,7 @@ class Commands:
         @bot.command(name="commands")
         async def commands(ctx):
             await ctx.message.delete()
-            await ctx.send("**Commands:**\n`$clear <x>` - Clear x messages from the chat.;\n`$level` - Shows your "
+            await ctx.send("**Commands:**\n`$clear x` - Clear x messages from the chat.;\n`$level` - Shows your "
                            "level;\n`$myid` - Shows your Dircord ID;\n`$legend` - Check if you're a legend;\n`$mv33` "
                            "- Shows the best Formula 1 driver;", delete_after=60)
 
@@ -11,8 +11,12 @@ class Commands:
         async def clear(ctx, amount):
             await ctx.message.delete()
             if ctx.author.guild_permissions.administrator:
-                await ctx.channel.purge(limit=int(amount) + 1)
-                await ctx.send(f"Cleared {amount} message in this chat! :broom:", delete_after=10)
+                if amount == "all":
+                    await ctx.channel.purge(limit=100000000)
+                    await ctx.send("Cleared all messages in this chat! :broom:", delete_after=10)
+                else:
+                    await ctx.channel.purge(limit=int(amount) + 1)
+                    await ctx.send(f"Cleared {amount} messages in this chat! :broom:", delete_after=10)
             else:
                 await ctx.send(
                     f"{ctx.author.mention}, you don't have permission to use this command! :face_with_raised_eyebrow:",
